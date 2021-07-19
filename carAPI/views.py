@@ -11,6 +11,7 @@ def index(request):
     return HttpResponse(response, content_type='text/json')
 
 def get_car(request, car_name):
+
     if request.method == 'GET':
         try:
             car = Car.objects.get(name=car_name)
@@ -21,7 +22,9 @@ def get_car(request, car_name):
 
 @csrf_exempt
 def add_car(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        return HttpResponse("Forbidden Access")
+    elif request.method == 'POST':
         payload = json.loads(request.body)
         car_name = payload['car_name']
         top_speed = payload['top_speed']
@@ -31,4 +34,4 @@ def add_car(request):
             response = json.dumps([{ 'Success': 'Car added successfully!'}])
         except:
             response = json.dumps([{ 'Error': 'Car could not be added!'}])
-    return HttpResponse(response, content_type='text/json')
+        return HttpResponse(response, content_type='text/json')
